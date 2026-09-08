@@ -7,6 +7,7 @@ This repository contains a minimal, CPU-friendly project skeleton for a Gymnasiu
 - `orderbook_execution_env.py` — a Gymnasium-compatible `OrderBookExecutionEnv` implementation with the requested five-element vector observation and four discrete actions.
 - `train.py` — a PPO training script with `EvalCallback`, TensorBoard logging, and model export.
 - `benchmark.py` — a KPI/dashboard generator comparing the RL policy against TWAP/VWAP/naive limit-style baselines.
+- `index.html`, `styles.css`, `app.js` — a clean static dashboard UI inspired by a shadcn-style trading-agent control surface.
 - `requirements.txt` — pinned dependencies for the environment, training, plotting, and test stack.
 
 ## Quick start

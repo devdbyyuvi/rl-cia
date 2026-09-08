@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HFT-Execution-RL</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <span class="brand-icon">
+            <svg viewBox="0 0 24 24" class="logo-svg">
+              <path d="M3 12h6l3-8 3 14 2-6h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="brand-word">HFT-Execution-RL</span>
+        </div>
+      </div>
+
+      <div class="workspace-block">
+        <div class="section-label">Workspace</div>
+        <nav class="nav-list">
+          <a class="nav-item active" href="#">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" fill="currentColor" opacity=".95"/></svg>
+            <span>Execution Monitor</span>
+          </a>
+          <a class="nav-item" href="#">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15l4-4 4 4 4-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Performance</span>
+          </a>
+          <a class="nav-item" href="#">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M6 7h12M6 12h12M6 17h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <span>Policy Log</span>
+          </a>
+        </nav>
+      </div>
+
+      <section class="strategy-card">
+        <div class="section-label small-label">Strategy mode</div>
+        <div class="strategy-row">
+          <span class="strategy-name">Optimal Execution</span>
+          <span class="status-chip live">
+            <span class="chip-dot"></span>
+            Live
+          </span>
+        </div>
+        <div class="strategy-meta">
+          <span class="meta-row">
+            <span class="meta-key">Risk</span>
+            <span class="meta-value">Moderate</span>
+          </span>
+          <span class="meta-row">
+            <span class="meta-key">Horizon</span>
+            <span class="meta-value">50 steps</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="market-card">
+        <div class="section-label">Market View</div>
+        <div class="market-list">
+          <div class="market-row">
+            <span class="market-label">Mid</span>
+            <span class="market-value mid-value">100.12</span>
+          </div>
+          <div class="market-row">
+            <span class="market-label">Spread</span>
+            <span class="market-value spread-value">1.02</span>
+          </div>
+          <div class="market-row">
+            <span class="market-label">Imbalance</span>
+            <span class="market-value imbalance-value">+0.13</span>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main-content">
+      <section class="topbar">
+        <div class="topbar-left">
+          <div class="crumb">
+            <span class="crumb-current">Execution</span>
+            <span class="crumb-slash">/</span>
+            <span class="crumb-live">Live Session</span>
+          </div>
+          <h1>Order Book Execution</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="ghost-button">TWAP</button>
+          <button class="ghost-button">VWAP</button>
+          <button class="primary-button">
+            <span class="pulse-dot"></span>
+            <span>Run Simulation</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-title">
+            <span>Inventory Remaining</span>
+            <span class="kpi-icon positive">↔</span>
+          </div>
+          <div class="kpi-value" id="inventoryMetric">742</div>
+          <div class="kpi-meta">
+            <span class="kpi-delta up">-26.8%</span>
+            <span class="muted-label">of block</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-title">
+            <span>Execution Cost</span>
+            <span class="kpi-icon neutral">Σ</span>
+          </div>
+          <div class="kpi-value" id="costMetric">$1,020</div>
+          <div class="kpi-meta">
+            <span class="kpi-delta down">-$12.4</span>
+            <span class="muted-label">slippage</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-title">
+            <span>Completion Rate</span>
+            <span class="kpi-icon positive">✓</span>
+          </div>
+          <div class="kpi-value" id="completionMetric">74%</div>
+          <div class="kpi-meta">
+            <span class="kpi-delta up">+9.2%</span>
+            <span class="muted-label">target</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-title">
+            <span>Risk Penalty</span>
+            <span class="kpi-icon warn">!</span>
+          </div>
+          <div class="kpi-value" id="riskMetric">12.5</div>
+          <div class="kpi-meta">
+            <span class="kpi-delta neutral">stable</span>
+            <span class="muted-label">volatility</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel panel-large">
+          <section class="panel-head">
+            <div>
+              <span class="panel-label">Inventory Trajectory</span>
+              <h2>Execution Progress</h2>
+            </div>
+            <div class="panel-controls">
+              <button class="icon-button active-range">1D</button>
+              <button class="icon-button">7D</button>
+              <button class="icon-button">
+                <svg class="icon small-icon" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15l4-4 4 4 4-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </section>
+
+          <section class="chart-area">
+            <canvas id="inventoryChart" width="780" height="280" aria-label="Inventory trajectory chart"></canvas>
+          </section>
+
+          <section class="chart-legend">
+            <span><i class="legend-dot rl-dot"></i> RL Policy</span>
+            <span><i class="legend-dot twap-dot"></i> TWAP</span>
+            <span><i class="legend-dot vwap-dot"></i> VWAP</span>
+          </section>
+        </article>
+
+        <article class="panel panel-side">
+          <section class="panel-head compact-head">
+            <div>
+              <span class="panel-label">Action Mix</span>
+              <h2>Router State</h2>
+            </div>
+          </section>
+
+          <section class="action-bars">
+            <div class="bar-row">
+              <span class="bar-label">Passive</span>
+              <div class="bar-wrap"><div class="bar-fill passive-fill" id="barPassive"></div></div>
+              <span class="bar-value" id="passiveValue">36%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Aggressive</span>
+              <div class="bar-wrap"><div class="bar-fill aggressive-fill" id="barAggressive"></div></div>
+              <span class="bar-value" id="aggressiveValue">21%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Market</span>
+              <div class="bar-wrap"><div class="bar-fill market-fill" id="barMarket"></div></div>
+              <span class="bar-value" id="marketValue">33%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Wait</span>
+              <div class="bar-wrap"><div class="bar-fill wait-fill" id="barWait"></div></div>
+              <span class="bar-value" id="waitValue">10%</span>
+            </div>
+          </section>
+
+          <section class="heatmap-wrap">
+            <div class="heatmap-head">
+              <span class="panel-label">Book Imbalance</span>
+            </div>
+            <div class="heatmap">
+              <div class="heat-grid">
+                <span class="heat-cell high"></span>
+                <span class="heat-cell mid"></span>
+                <span class="heat-cell low"></span>
+                <span class="heat-cell low"></span>
+                <span class="heat-cell mid"></span>
+                <span class="heat-cell high"></span>
+                <span class="heat-cell low"></span>
+                <span class="heat-cell mid"></span>
+                <span class="heat-cell high"></span>
+                <span class="heat-cell low"></span>
+              </div>
+            </div>
+          </section>
+        </article>
+      </section>
+
+      <section class="lower-grid">
+        <article class="panel">
+          <section class="panel-head compact-head">
+            <div>
+              <span class="panel-label">Slippage Distribution</span>
+              <h2>Execution Cost</h2>
+            </div>
+          </section>
+          <section class="histogram">
+            <div class="hist-bars">
+              <span class="hist-bar" style="height:25%"></span>
+              <span class="hist-bar" style="height:45%"></span>
+              <span class="hist-bar" style="height:60%"></span>
+              <span class="hist-bar" style="height:48%"></span>
+              <span class="hist-bar" style="height:70%"></span>
+              <span class="hist-bar" style="height:66%"></span>
+              <span class="hist-bar" style="height:50%"></span>
+              <span class="hist-bar" style="height:78%"></span>
+              <span class="hist-bar" style="height:72%"></span>
+              <span class="hist-bar" style="height:68%"></span>
+              <span class="hist-bar" style="height:42%"></span>
+              <span class="hist-bar" style="height:32%"></span>
+            </div>
+          </section>
+        </article>
+
+        <article class="panel">
+          <section class="panel-head compact-head">
+            <div>
+              <span class="panel-label">Recent Actions</span>
+              <h2>Order Flow</h2>
+            </div>
+          </section>
+          <section class="log-list" id="actionLog">
+            <div class="log-item">
+              <span class="log-dot market-dot"></span>
+              <span class="log-text">Market order routed</span>
+              <span class="log-time">12:01:48</span>
+            </div>
+            <div class="log-item">
+              <span class="log-dot passive-dot"></span>
+              <span class="log-text">Passive limit accepted</span>
+              <span class="log-time">12:01:50</span>
+            </div>
+            <div class="log-item">
+              <span class="log-dot aggressive-dot"></span>
+              <span class="log-text">Aggressive limit placed</span>
+              <span class="log-time">12:01:52</span>
+            </div>
+            <div class="log-item">
+              <span class="log-dot wait-dot"></span>
+              <span class="log-text">Order held for rebalancing</span>
+              <span class="log-time">12:01:56</span>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
