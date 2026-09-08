@@ -854,3 +854,279 @@ button {
   .topbar { flex-direction: column; align-items: flex-start; }
   .topbar-actions { width: 100%; overflow-x: auto; padding-bottom: 8px; }
 }
+
+
+/* ============================================
+   VIEW SWITCHING
+   ============================================ */
+.view-container {
+  display: none;
+}
+
+.view-container.active {
+  display: block;
+}
+
+/* ============================================
+   PERFORMANCE VIEW
+   ============================================ */
+.perf-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.perf-kpi-card {
+  background: var(--panel);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-soft);
+  padding: 20px;
+  transition: border-color 0.2s ease;
+}
+
+.perf-kpi-card:hover {
+  border-color: var(--line);
+}
+
+.perf-kpi-title {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.perf-kpi-value {
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.perf-kpi-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.perf-kpi-meta .positive { color: var(--green); font-weight: 600; }
+.perf-kpi-meta .negative { color: var(--red); font-weight: 600; }
+
+/* Strategy Comparison Table */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.comparison-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.comparison-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text-soft);
+  border-bottom: 1px solid var(--line-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table tr:hover td {
+  background: var(--panel-elevated);
+}
+
+.comparison-table .strategy-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.comparison-table .positive { color: var(--green); font-weight: 600; }
+.comparison-table .negative { color: var(--red); font-weight: 600; }
+.comparison-table .neutral { color: var(--slate); font-weight: 600; }
+
+.comparison-table .best-row td {
+  background: var(--green-soft);
+  border-color: rgba(16, 185, 129, 0.1);
+}
+
+/* Performance Chart Area */
+.perf-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.perf-chart-card {
+  background: var(--panel);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-soft);
+  padding: 24px;
+}
+
+.perf-chart-card h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.perf-chart-card .chart-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.perf-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 140px;
+  margin-top: 12px;
+}
+
+.perf-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.perf-bar {
+  width: 100%;
+  max-width: 48px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+}
+
+.perf-bar.slate { background: var(--slate); }
+.perf-bar.amber { background: var(--amber); }
+.perf-bar.green { background: var(--green); }
+.perf-bar.red { background: var(--red); }
+
+.perf-bar-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ============================================
+   POLICY LOG VIEW
+   ============================================ */
+.log-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.log-filter-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.log-filter-btn:hover {
+  background: var(--panel-elevated);
+  color: var(--text);
+}
+
+.log-filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.policy-log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.policy-log-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--line-soft);
+  white-space: nowrap;
+}
+
+.policy-log-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-soft);
+  border-bottom: 1px solid var(--line-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.policy-log-table tr:last-child td {
+  border-bottom: none;
+}
+
+.policy-log-table tr:hover td {
+  background: var(--panel-elevated);
+}
+
+.policy-log-table .timestamp {
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.policy-log-table .action-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.action-badge.market { background: var(--red-soft); color: var(--red); }
+.action-badge.passive { background: var(--slate-soft); color: var(--slate); }
+.action-badge.aggressive { background: var(--amber-soft); color: var(--amber); }
+.action-badge.wait { background: var(--green-soft); color: var(--green); }
+.action-badge.strategy { background: var(--green-soft); color: var(--green); }
+
+.policy-log-table .outcome-filled { color: var(--green); font-weight: 600; }
+.policy-log-table .outcome-cancelled { color: var(--red); font-weight: 600; }
+.policy-log-table .outcome-pending { color: var(--amber); font-weight: 600; }
+.policy-log-table .outcome-rebalanced { color: var(--slate); font-weight: 600; }
+
+/* Responsive for new views */
+@media (max-width: 1100px) {
+  .perf-kpi-grid { grid-template-columns: 1fr; }
+  .perf-chart-grid { grid-template-columns: 1fr; }
+  .log-controls { flex-wrap: wrap; }
+}

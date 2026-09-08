@@ -23,15 +23,15 @@
       <div class="workspace-block">
         <div class="section-label">Workspace</div>
         <nav class="nav-list">
-          <a class="nav-item active" href="#">
+          <a class="nav-item active" href="#" data-view="execution">
             <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" fill="currentColor" opacity=".95"/></svg>
             <span>Execution Monitor</span>
           </a>
-          <a class="nav-item" href="#">
+          <a class="nav-item" href="#" data-view="performance">
             <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15l4-4 4 4 4-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Performance</span>
           </a>
-          <a class="nav-item" href="#">
+          <a class="nav-item" href="#" data-view="policylog">
             <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M6 7h12M6 12h12M6 17h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
             <span>Policy Log</span>
           </a>
@@ -79,222 +79,240 @@
     </aside>
 
     <main class="main-content">
-      <section class="topbar">
-        <div class="topbar-left">
-          <div class="crumb">
-            <span class="crumb-current">Execution</span>
-            <span class="crumb-slash">/</span>
-            <span class="crumb-live">Live Session</span>
-          </div>
-          <h1>Order Book Execution</h1>
-        </div>
 
-        <div class="topbar-actions">
-          <button class="ghost-button strategy-button" id="twapButton" data-tooltip="TWAP: evenly slices volume across the execution window with market participation." data-strategy="TWAP" title="TWAP: equal-volume time slices: shortest path for block execution.">TWAP</button>
-          <button class="ghost-button strategy-button" id="vwapButton" data-tooltip="VWAP: trades in proportion to book volume and market pressure." data-strategy="VWAP" title="VWAP: trade relative to expected volume curve.">VWAP</button>
-          <button class="ghost-button strategy-button" id="naiveButton" data-tooltip="Naive Limit: passive resting order strategy without inventory-aware routing." data-strategy="NaiveLimit" title="Naive Limit: passive resting order strategy.">Naive Limit</button>
-          <button class="primary-button" id="runButton" data-tooltip="Run the live simulation and refresh the dashboard metrics." title="Run the live simulation.">
-            <span class="pulse-dot"></span>
-            <span>Run Simulation</span>
-          </button>
-        </div>
-      </section>
-
-      <section class="kpi-grid">
-        <article class="kpi-card">
-          <div class="kpi-title">
-            <span>Inventory Remaining</span>
-            <span class="kpi-icon positive">↔</span>
-          </div>
-          <div class="kpi-value" id="inventoryMetric">742</div>
-          <div class="kpi-meta">
-            <span class="kpi-delta up">-26.8%</span>
-            <span class="muted-label">of block</span>
-          </div>
-        </article>
-
-        <article class="kpi-card">
-          <div class="kpi-title">
-            <span>Execution Cost</span>
-            <span class="kpi-icon neutral">Σ</span>
-          </div>
-          <div class="kpi-value" id="costMetric">$1,020</div>
-          <div class="kpi-meta">
-            <span class="kpi-delta down">-$12.4</span>
-            <span class="muted-label">slippage</span>
-          </div>
-        </article>
-
-        <article class="kpi-card">
-          <div class="kpi-title">
-            <span>Completion Rate</span>
-            <span class="kpi-icon positive">✓</span>
-          </div>
-          <div class="kpi-value" id="completionMetric">74%</div>
-          <div class="kpi-meta">
-            <span class="kpi-delta up">+9.2%</span>
-            <span class="muted-label">target</span>
-          </div>
-        </article>
-
-        <article class="kpi-card">
-          <div class="kpi-title">
-            <span>Risk Penalty</span>
-            <span class="kpi-icon warn">!</span>
-          </div>
-          <div class="kpi-value" id="riskMetric">12.5</div>
-          <div class="kpi-meta">
-            <span class="kpi-delta neutral">stable</span>
-            <span class="muted-label">volatility</span>
-          </div>
-        </article>
-      </section>
-
-      <section class="content-grid">
-        <article class="panel panel-large">
-          <section class="panel-head">
-            <div>
-              <span class="panel-label">Inventory Trajectory</span>
-              <h2>Execution Progress</h2>
+      <!-- ============================================
+           VIEW 1: EXECUTION MONITOR
+           ============================================ -->
+      <div id="view-execution" class="view-container active">
+        <section class="topbar">
+          <div class="topbar-left">
+            <div class="crumb">
+              <span class="crumb-current">Execution</span>
+              <span class="crumb-slash">/</span>
+              <span class="crumb-live">Live Session</span>
             </div>
-            <div class="panel-controls">
-              <button class="icon-button active-range" id="range1d">1D</button>
-              <button class="icon-button" id="range7d">7D</button>
-              <button class="icon-button" id="growthButton" aria-label="Toggle performance comparison">
-                <svg class="icon small-icon" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15l4-4 4 4 4-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-            </div>
-          </section>
+            <h1>Order Book Execution</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost-button strategy-button" id="twapButton" data-tooltip="TWAP: evenly slices volume across the execution window with market participation." data-strategy="TWAP" title="TWAP">TWAP</button>
+            <button class="ghost-button strategy-button" id="vwapButton" data-tooltip="VWAP: trades in proportion to book volume and market pressure." data-strategy="VWAP" title="VWAP">VWAP</button>
+            <button class="ghost-button strategy-button" id="naiveButton" data-tooltip="Naive Limit: passive resting order strategy without inventory-aware routing." data-strategy="NaiveLimit" title="Naive Limit">Naive Limit</button>
+            <button class="primary-button" id="runButton" data-tooltip="Run the live simulation and refresh the dashboard metrics." title="Run the live simulation.">
+              <span class="pulse-dot"></span>
+              <span>Run Simulation</span>
+            </button>
+          </div>
+        </section>
 
-          <section class="chart-area">
-            <canvas id="inventoryChart" width="780" height="280" aria-label="Inventory trajectory chart"></canvas>
-          </section>
+        <section class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-title"><span>Inventory Remaining</span><span class="kpi-icon positive">↔</span></div>
+            <div class="kpi-value" id="inventoryMetric">742</div>
+            <div class="kpi-meta"><span class="kpi-delta up">-26.8%</span><span class="muted-label">of block</span></div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-title"><span>Execution Cost</span><span class="kpi-icon neutral">Σ</span></div>
+            <div class="kpi-value" id="costMetric">$1,020</div>
+            <div class="kpi-meta"><span class="kpi-delta down">-$12.4</span><span class="muted-label">slippage</span></div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-title"><span>Completion Rate</span><span class="kpi-icon positive">✓</span></div>
+            <div class="kpi-value" id="completionMetric">74%</div>
+            <div class="kpi-meta"><span class="kpi-delta up">+9.2%</span><span class="muted-label">target</span></div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-title"><span>Risk Penalty</span><span class="kpi-icon warn">!</span></div>
+            <div class="kpi-value" id="riskMetric">12.5</div>
+            <div class="kpi-meta"><span class="kpi-delta neutral">stable</span><span class="muted-label">volatility</span></div>
+          </article>
+        </section>
 
-          <section class="chart-legend">
-            <span><i class="legend-dot rl-dot"></i> RL Policy</span>
-            <span><i class="legend-dot twap-dot"></i> TWAP</span>
-            <span><i class="legend-dot vwap-dot"></i> VWAP</span>
-          </section>
-          <section class="chart-footnote">
-            <span class="footnote-title">What this chart means</span>
-            <span class="footnote-copy" id="chartMeaningText">Inventory falls as execution progresses. The RL line shows the policy’s adaptive path; TWAP and VWAP are reference baselines.</span>
-          </section>
-        </article>
-
-        <article class="panel panel-side">
-          <section class="panel-head compact-head">
-            <div>
-              <span class="panel-label">Action Mix</span>
-              <h2>Router State</h2>
-            </div>
-          </section>
-
-          <section class="action-bars">
-            <div class="bar-row">
-              <span class="bar-label">Passive</span>
-              <div class="bar-wrap"><div class="bar-fill passive-fill" id="barPassive"></div></div>
-              <span class="bar-value" id="passiveValue">36%</span>
-            </div>
-            <div class="bar-row">
-              <span class="bar-label">Aggressive</span>
-              <div class="bar-wrap"><div class="bar-fill aggressive-fill" id="barAggressive"></div></div>
-              <span class="bar-value" id="aggressiveValue">21%</span>
-            </div>
-            <div class="bar-row">
-              <span class="bar-label">Market</span>
-              <div class="bar-wrap"><div class="bar-fill market-fill" id="barMarket"></div></div>
-              <span class="bar-value" id="marketValue">33%</span>
-            </div>
-            <div class="bar-row">
-              <span class="bar-label">Wait</span>
-              <div class="bar-wrap"><div class="bar-fill wait-fill" id="barWait"></div></div>
-              <span class="bar-value" id="waitValue">10%</span>
-            </div>
-          </section>
-
-          <section class="heatmap-wrap">
-            <div class="heatmap-head">
-              <span class="panel-label">Book Imbalance</span>
-            </div>
-            <div class="heatmap">
-              <div class="heat-grid">
-                <span class="heat-cell high"></span>
-                <span class="heat-cell mid"></span>
-                <span class="heat-cell low"></span>
-                <span class="heat-cell low"></span>
-                <span class="heat-cell mid"></span>
-                <span class="heat-cell high"></span>
-                <span class="heat-cell low"></span>
-                <span class="heat-cell mid"></span>
-                <span class="heat-cell high"></span>
-                <span class="heat-cell low"></span>
+        <section class="content-grid">
+          <article class="panel panel-large">
+            <section class="panel-head">
+              <div><span class="panel-label">Inventory Trajectory</span><h2>Execution Progress</h2></div>
+              <div class="panel-controls">
+                <button class="icon-button active-range" id="range1d">1D</button>
+                <button class="icon-button" id="range7d">7D</button>
+                <button class="icon-button" id="growthButton" aria-label="Toggle performance comparison">
+                  <svg class="icon small-icon" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15l4-4 4 4 4-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
               </div>
-            </div>
-          </section>
-        </article>
-      </section>
+            </section>
+            <section class="chart-area">
+              <canvas id="inventoryChart" width="780" height="280" aria-label="Inventory trajectory chart"></canvas>
+            </section>
+            <section class="chart-legend">
+              <span><i class="legend-dot rl-dot"></i> RL Policy</span>
+              <span><i class="legend-dot twap-dot"></i> TWAP</span>
+              <span><i class="legend-dot vwap-dot"></i> VWAP</span>
+            </section>
+            <section class="chart-footnote">
+              <span class="footnote-title">What this chart means</span>
+              <span class="footnote-copy" id="chartMeaningText">Inventory falls as execution progresses. The RL line shows the policy's adaptive path; TWAP and VWAP are reference baselines.</span>
+            </section>
+          </article>
 
-      <section class="lower-grid">
-        <article class="panel">
-          <section class="panel-head compact-head">
-            <div>
-              <span class="panel-label">Slippage Distribution</span>
-              <h2>Execution Cost</h2>
+          <article class="panel panel-side">
+            <section class="panel-head compact-head">
+              <div><span class="panel-label">Action Mix</span><h2>Router State</h2></div>
+            </section>
+            <section class="action-bars">
+              <div class="bar-row"><span class="bar-label">Passive</span><div class="bar-wrap"><div class="bar-fill passive-fill" id="barPassive"></div></div><span class="bar-value" id="passiveValue">36%</span></div>
+              <div class="bar-row"><span class="bar-label">Aggressive</span><div class="bar-wrap"><div class="bar-fill aggressive-fill" id="barAggressive"></div></div><span class="bar-value" id="aggressiveValue">21%</span></div>
+              <div class="bar-row"><span class="bar-label">Market</span><div class="bar-wrap"><div class="bar-fill market-fill" id="barMarket"></div></div><span class="bar-value" id="marketValue">33%</span></div>
+              <div class="bar-row"><span class="bar-label">Wait</span><div class="bar-wrap"><div class="bar-fill wait-fill" id="barWait"></div></div><span class="bar-value" id="waitValue">10%</span></div>
+            </section>
+            <section class="heatmap-wrap">
+              <div class="heatmap-head"><span class="panel-label">Book Imbalance</span></div>
+              <div class="heatmap">
+                <div class="heat-grid">
+                  <span class="heat-cell high"></span><span class="heat-cell mid"></span><span class="heat-cell low"></span><span class="heat-cell low"></span><span class="heat-cell mid"></span>
+                  <span class="heat-cell high"></span><span class="heat-cell low"></span><span class="heat-cell mid"></span><span class="heat-cell high"></span><span class="heat-cell low"></span>
+                </div>
+              </div>
+            </section>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel">
+            <section class="panel-head compact-head"><div><span class="panel-label">Slippage Distribution</span><h2>Execution Cost</h2></div></section>
+            <section class="histogram">
+              <div class="hist-bars">
+                <span class="hist-bar" style="height:25%"></span><span class="hist-bar" style="height:45%"></span><span class="hist-bar" style="height:60%"></span>
+                <span class="hist-bar" style="height:48%"></span><span class="hist-bar" style="height:70%"></span><span class="hist-bar" style="height:66%"></span>
+                <span class="hist-bar" style="height:50%"></span><span class="hist-bar" style="height:78%"></span><span class="hist-bar" style="height:72%"></span>
+                <span class="hist-bar" style="height:68%"></span><span class="hist-bar" style="height:42%"></span><span class="hist-bar" style="height:32%"></span>
+              </div>
+            </section>
+            <section class="widget-footnote">
+              <span class="widget-footnote-label">What this cost widget means</span>
+              <span class="widget-footnote-copy">Lower and tighter slippage bars suggest more stable routing decisions and less adverse market impact.</span>
+            </section>
+          </article>
+          <article class="panel">
+            <section class="panel-head compact-head"><div><span class="panel-label">Recent Actions</span><h2>Order Flow</h2></div></section>
+            <section class="log-list" id="actionLog">
+              <div class="log-item"><span class="log-dot market-dot"></span><span class="log-text">Market order routed</span><span class="log-time">12:01:48</span></div>
+              <div class="log-item"><span class="log-dot passive-dot"></span><span class="log-text">Passive limit accepted</span><span class="log-time">12:01:50</span></div>
+              <div class="log-item"><span class="log-dot aggressive-dot"></span><span class="log-text">Aggressive limit placed</span><span class="log-time">12:01:52</span></div>
+              <div class="log-item"><span class="log-dot wait-dot"></span><span class="log-text">Order held for rebalancing</span><span class="log-time">12:01:56</span></div>
+            </section>
+          </article>
+        </section>
+      </div>
+
+      <!-- ============================================
+           VIEW 2: PERFORMANCE
+           ============================================ -->
+      <div id="view-performance" class="view-container">
+        <section class="topbar">
+          <div class="topbar-left">
+            <div class="crumb"><span class="crumb-current">Analytics</span><span class="crumb-slash">/</span><span class="crumb-live">Performance</span></div>
+            <h1>Performance Analysis</h1>
+          </div>
+        </section>
+
+        <section class="perf-kpi-grid">
+          <article class="perf-kpi-card">
+            <div class="perf-kpi-title">Cost vs Baseline</div>
+            <div class="perf-kpi-value">-3.4%</div>
+            <div class="perf-kpi-meta"><span class="positive">↓ $42.18</span> saved vs TWAP baseline</div>
+          </article>
+          <article class="perf-kpi-card">
+            <div class="perf-kpi-title">Slippage Reduction</div>
+            <div class="perf-kpi-value">-18.2%</div>
+            <div class="perf-kpi-meta"><span class="positive">↓ 2.1 bps</span> improvement over VWAP</div>
+          </article>
+          <article class="perf-kpi-card">
+            <div class="perf-kpi-title">Completion Improvement</div>
+            <div class="perf-kpi-value">+9.2%</div>
+            <div class="perf-kpi-meta"><span class="positive">↑ 74% → 83%</span> target completion rate</div>
+          </article>
+        </section>
+
+        <section class="perf-chart-grid">
+          <article class="perf-chart-card">
+            <h3>Execution Cost by Strategy</h3>
+            <div class="chart-subtitle">Total cost in USD across last 50 sessions</div>
+            <div class="perf-bar-chart">
+              <div class="perf-bar-group"><div class="perf-bar slate" style="height:85%"></div><span class="perf-bar-label">TWAP</span></div>
+              <div class="perf-bar-group"><div class="perf-bar amber" style="height:72%"></div><span class="perf-bar-label">VWAP</span></div>
+              <div class="perf-bar-group"><div class="perf-bar red" style="height:90%"></div><span class="perf-bar-label">Naive</span></div>
+              <div class="perf-bar-group"><div class="perf-bar green" style="height:58%"></div><span class="perf-bar-label">RL Policy</span></div>
             </div>
-          </section>
-          <section class="histogram">
-            <div class="hist-bars">
-              <span class="hist-bar" style="height:25%"></span>
-              <span class="hist-bar" style="height:45%"></span>
-              <span class="hist-bar" style="height:60%"></span>
-              <span class="hist-bar" style="height:48%"></span>
-              <span class="hist-bar" style="height:70%"></span>
-              <span class="hist-bar" style="height:66%"></span>
-              <span class="hist-bar" style="height:50%"></span>
-              <span class="hist-bar" style="height:78%"></span>
-              <span class="hist-bar" style="height:72%"></span>
-              <span class="hist-bar" style="height:68%"></span>
-              <span class="hist-bar" style="height:42%"></span>
-              <span class="hist-bar" style="height:32%"></span>
+          </article>
+          <article class="perf-chart-card">
+            <h3>Slippage Distribution</h3>
+            <div class="chart-subtitle">Basis points of slippage per execution</div>
+            <div class="perf-bar-chart">
+              <div class="perf-bar-group"><div class="perf-bar slate" style="height:40%"></div><span class="perf-bar-label">TWAP</span></div>
+              <div class="perf-bar-group"><div class="perf-bar amber" style="height:35%"></div><span class="perf-bar-label">VWAP</span></div>
+              <div class="perf-bar-group"><div class="perf-bar red" style="height:65%"></div><span class="perf-bar-label">Naive</span></div>
+              <div class="perf-bar-group"><div class="perf-bar green" style="height:22%"></div><span class="perf-bar-label">RL Policy</span></div>
             </div>
-          </section>
-          <section class="widget-footnote">
-            <span class="widget-footnote-label">What this cost widget means</span>
-            <span class="widget-footnote-copy">Lower and tighter slippage bars suggest more stable routing decisions and less adverse market impact.</span>
-          </section>
+          </article>
+        </section>
+
+        <article class="panel" style="margin-top:16px">
+          <section class="panel-head compact-head"><div><span class="panel-label">Benchmark Comparison</span><h2>Strategy Performance Table</h2></div></section>
+          <table class="comparison-table">
+            <thead>
+              <tr><th>Strategy</th><th>Avg Cost</th><th>Slippage (bps)</th><th>Completion</th><th>Risk Score</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr class="best-row"><td class="strategy-name">RL Policy</td><td>$1,020</td><td class="positive">2.4</td><td class="positive">83%</td><td>12.5</td><td class="positive">Active</td></tr>
+              <tr><td class="strategy-name">TWAP</td><td>$1,062</td><td class="neutral">4.1</td><td class="neutral">76%</td><td>14.2</td><td class="neutral">Baseline</td></tr>
+              <tr><td class="strategy-name">VWAP</td><td>$1,048</td><td class="neutral">3.8</td><td class="neutral">74%</td><td>13.8</td><td class="neutral">Baseline</td></tr>
+              <tr><td class="strategy-name">Naive Limit</td><td>$1,085</td><td class="negative">6.2</td><td class="negative">61%</td><td>18.1</td><td class="negative">Degraded</td></tr>
+            </tbody>
+          </table>
         </article>
+      </div>
+
+      <!-- ============================================
+           VIEW 3: POLICY LOG
+           ============================================ -->
+      <div id="view-policylog" class="view-container">
+        <section class="topbar">
+          <div class="topbar-left">
+            <div class="crumb"><span class="crumb-current">Audit</span><span class="crumb-slash">/</span><span class="crumb-live">Policy Log</span></div>
+            <h1>Policy Decision Log</h1>
+          </div>
+        </section>
 
         <article class="panel">
-          <section class="panel-head compact-head">
-            <div>
-              <span class="panel-label">Recent Actions</span>
-              <h2>Order Flow</h2>
-            </div>
-          </section>
-          <section class="log-list" id="actionLog">
-            <div class="log-item">
-              <span class="log-dot market-dot"></span>
-              <span class="log-text">Market order routed</span>
-              <span class="log-time">12:01:48</span>
-            </div>
-            <div class="log-item">
-              <span class="log-dot passive-dot"></span>
-              <span class="log-text">Passive limit accepted</span>
-              <span class="log-time">12:01:50</span>
-            </div>
-            <div class="log-item">
-              <span class="log-dot aggressive-dot"></span>
-              <span class="log-text">Aggressive limit placed</span>
-              <span class="log-time">12:01:52</span>
-            </div>
-            <div class="log-item">
-              <span class="log-dot wait-dot"></span>
-              <span class="log-text">Order held for rebalancing</span>
-              <span class="log-time">12:01:56</span>
-            </div>
-          </section>
+          <section class="panel-head compact-head"><div><span class="panel-label">Session Events</span><h2>Full Event History</h2></div></section>
+
+          <div class="log-controls">
+            <button class="log-filter-btn active" data-filter="all">All Events</button>
+            <button class="log-filter-btn" data-filter="market">Market</button>
+            <button class="log-filter-btn" data-filter="passive">Passive</button>
+            <button class="log-filter-btn" data-filter="aggressive">Aggressive</button>
+            <button class="log-filter-btn" data-filter="strategy">Strategy</button>
+          </div>
+
+          <table class="policy-log-table" id="policyLogTable">
+            <thead>
+              <tr><th>Timestamp</th><th>Strategy</th><th>Action</th><th>Detail</th><th>Market State</th><th>Outcome</th></tr>
+            </thead>
+            <tbody>
+              <tr data-type="strategy"><td class="timestamp">12:01:48.201</td><td>RL Policy</td><td><span class="action-badge strategy">Strategy</span></td><td>Mode switched to TWAP</td><td>Mid 100.12 · Spread 1.02</td><td class="outcome-filled">Applied</td></tr>
+              <tr data-type="market"><td class="timestamp">12:01:48.450</td><td>RL Policy</td><td><span class="action-badge market">Market</span></td><td>Market order routed · 15 units</td><td>Mid 100.12 · Imb +0.13</td><td class="outcome-filled">Filled</td></tr>
+              <tr data-type="passive"><td class="timestamp">12:01:50.102</td><td>RL Policy</td><td><span class="action-badge passive">Passive</span></td><td>Limit placed at 100.08 · 20 units</td><td>Mid 100.10 · Spread 0.98</td><td class="outcome-filled">Filled</td></tr>
+              <tr data-type="aggressive"><td class="timestamp">12:01:52.330</td><td>RL Policy</td><td><span class="action-badge aggressive">Aggressive</span></td><td>Aggressive limit at 100.14 · 10 units</td><td>Mid 100.11 · Imb +0.08</td><td class="outcome-pending">Pending</td></tr>
+              <tr data-type="passive"><td class="timestamp">12:01:54.881</td><td>RL Policy</td><td><span class="action-badge passive">Passive</span></td><td>Limit placed at 100.06 · 25 units</td><td>Mid 100.09 · Spread 1.05</td><td class="outcome-cancelled">Cancelled</td></tr>
+              <tr data-type="market"><td class="timestamp">12:01:56.120</td><td>RL Policy</td><td><span class="action-badge wait">Wait</span></td><td>Order held for rebalancing</td><td>Mid 100.10 · Imb -0.05</td><td class="outcome-rebalanced">Rebalanced</td></tr>
+              <tr data-type="strategy"><td class="timestamp">12:01:58.442</td><td>RL Policy</td><td><span class="action-badge strategy">Strategy</span></td><td>Mode switched to VWAP</td><td>Mid 100.11 · Spread 1.01</td><td class="outcome-filled">Applied</td></tr>
+              <tr data-type="market"><td class="timestamp">12:02:00.015</td><td>VWAP</td><td><span class="action-badge market">Market</span></td><td>Market order routed · 12 units</td><td>Mid 100.12 · Imb +0.10</td><td class="outcome-filled">Filled</td></tr>
+              <tr data-type="passive"><td class="timestamp">12:02:02.334</td><td>VWAP</td><td><span class="action-badge passive">Passive</span></td><td>Limit placed at 100.09 · 18 units</td><td>Mid 100.11 · Spread 0.99</td><td class="outcome-filled">Filled</td></tr>
+              <tr data-type="aggressive"><td class="timestamp">12:02:04.551</td><td>VWAP</td><td><span class="action-badge aggressive">Aggressive</span></td><td>Aggressive limit at 100.15 · 8 units</td><td>Mid 100.13 · Imb +0.15</td><td class="outcome-filled">Filled</td></tr>
+            </tbody>
+          </table>
         </article>
-      </section>
+      </div>
+
     </main>
   </div>
 
