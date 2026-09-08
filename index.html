@@ -90,9 +90,10 @@
         </div>
 
         <div class="topbar-actions">
-          <button class="ghost-button">TWAP</button>
-          <button class="ghost-button">VWAP</button>
-          <button class="primary-button">
+          <button class="ghost-button strategy-button" id="twapButton" data-tooltip="TWAP: evenly slices volume across the execution window with market participation." data-strategy="TWAP" title="TWAP: equal-volume time slices: shortest path for block execution.">TWAP</button>
+          <button class="ghost-button strategy-button" id="vwapButton" data-tooltip="VWAP: trades in proportion to book volume and market pressure." data-strategy="VWAP" title="VWAP: trade relative to expected volume curve.">VWAP</button>
+          <button class="ghost-button strategy-button" id="naiveButton" data-tooltip="Naive Limit: passive resting order strategy without inventory-aware routing." data-strategy="NaiveLimit" title="Naive Limit: passive resting order strategy.">Naive Limit</button>
+          <button class="primary-button" id="runButton" data-tooltip="Run the live simulation and refresh the dashboard metrics." title="Run the live simulation.">
             <span class="pulse-dot"></span>
             <span>Run Simulation</span>
           </button>

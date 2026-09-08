@@ -17,16 +17,16 @@
   --green: #9cf0b7;
   --green-soft: rgba(156, 240, 183, 0.14);
   --green-deep: #39d98a;
-  --blue: #8bbdfc;
-  --blue-soft: rgba(139, 189, 252, 0.14);
-  --blue-deep: #6bb0ff;
+  --slate: #94a3b8;
+  --slate-soft: rgba(148, 163, 184, 0.14);
+  --slate-deep: #64748a;
   --red: #ff8585;
   --red-soft: rgba(255, 133, 133, 0.14);
   --amber: #ffd38a;
   --amber-soft: rgba(255, 211, 138, 0.14);
   --purple: #b79aff;
   --shadow: rgba(0,0,0,0.38);
-  --glow: rgba(139, 189, 252, 0.22);
+  --glow: rgba(148, 163, 184, 0.22);
   --radius: 20px;
 }
 
@@ -34,8 +34,8 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(circle at 78% 6%, rgba(115, 148, 255, 0.23), transparent 16%),
-    radial-gradient(circle at 57% 95%, rgba(50, 210, 160, 0.16), transparent 15%),
+    radial-gradient(circle at 78% 6%, rgba(148, 163, 184, 0.14), transparent 16%),
+    radial-gradient(circle at 57% 95%, rgba(88, 95, 112, 0.16), transparent 15%),
     var(--page);
   font-family: var(--font);
   min-height: 100vh;
@@ -247,7 +247,7 @@ body::before {
   font-weight: 800;
 }
 
-.market-value.mid-value {color: var(--blue);}
+.market-value.mid-value {color: var(--slate);} 
 .market-value.spread-value {color: var(--amber);}
 .market-value.imbalance-value {color: var(--green);}
 
@@ -308,19 +308,59 @@ button {
   font-size: 11px;
   font-weight: 800;
   transition: 0.2s all ease;
+  position: relative;
 }
 
 .ghost-button:hover,
 .icon-button:hover {
   color: var(--text);
-  border-color: var(--blue);
-  background: var(--blue-soft);
+  border-color: var(--slate);
+  background: var(--slate-soft);
+}
+
+.ghost-button::after,
+.primary-button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 280px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  border: 1px solid var(--line-soft);
+  background: var(--panel-muted);
+  color: var(--text-soft);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  white-space: normal;
+  box-shadow: 0 12px 28px var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 5;
+}
+
+.ghost-button:hover::after,
+.primary-button:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .icon-button.active-range {
-  color: var(--blue-deep);
-  border-color: var(--blue);
-  background: var(--blue-soft);
+  color: var(--slate-deep);
+  border-color: var(--slate);
+  background: var(--slate-soft);
+}
+
+.strategy-button.active-strategy {
+  color: var(--green);
+  border-color: var(--green);
+  background: var(--green-soft);
+  box-shadow: 0 0 0 1px var(--green-soft), 0 0 18px var(--glow);
 }
 
 .small-icon {
@@ -402,8 +442,8 @@ button {
 }
 
 .kpi-icon.neutral {
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--slate-soft);
+  color: var(--slate);
 }
 
 .kpi-icon.warn {
@@ -435,7 +475,7 @@ button {
 
 .kpi-delta.up {color: var(--green);} 
 .kpi-delta.down {color: var(--red);} 
-.kpi-delta.neutral {color: var(--blue);} 
+.kpi-delta.neutral {color: var(--slate);} 
 
 .muted-label {
   color: var(--text-muted);
@@ -525,7 +565,7 @@ button {
   border-radius: 50%;
 }
 
-.rl-dot {background: var(--blue);} .twap-dot {background: var(--amber);} .vwap-dot {background: var(--green);}
+.rl-dot {background: var(--slate);} .twap-dot {background: var(--amber);} .vwap-dot {background: var(--green);}
 
 .action-bars {
   margin-top: 22px;
@@ -560,7 +600,7 @@ button {
   border-radius: 999px;
 }
 
-.passive-fill {background: var(--blue); width: 36%;}
+.passive-fill {background: var(--slate); width: 36%;}
 .aggressive-fill {background: var(--amber); width: 21%;}
 .market-fill {background: var(--red); width: 33%;}
 .wait-fill {background: var(--green); width: 10%;}
@@ -596,7 +636,7 @@ button {
   border: 1px solid var(--line-soft);
 }
 
-.heat-cell.high {background: var(--blue-soft); border-color: var(--blue); box-shadow: 0 0 16px var(--blue-soft);}
+.heat-cell.high {background: var(--slate-soft); border-color: var(--slate); box-shadow: 0 0 16px var(--slate-soft);}
 .heat-cell.mid {background: var(--amber-soft); border-color: var(--amber);}
 .heat-cell.low {background: var(--green-soft); border-color: var(--green);}
 
@@ -626,7 +666,7 @@ button {
 .hist-bar {
   width: 16px;
   border-radius: 999px 999px 2px 2px;
-  background: linear-gradient(180deg, var(--blue), var(--green));
+  background: linear-gradient(180deg, var(--slate), var(--green));
   box-shadow: 0 0 16px var(--glow);
 }
 
@@ -662,7 +702,7 @@ button {
   font-size: 10px;
 }
 
-.market-dot {background: var(--red);} .passive-dot {background: var(--blue);} .aggressive-dot {background: var(--amber);} .wait-dot {background: var(--green);}
+.market-dot {background: var(--red);} .passive-dot {background: var(--slate);} .aggressive-dot {background: var(--amber);} .wait-dot {background: var(--green);}
 
 @media (max-width: 1100px) {
   .app-shell {flex-wrap: wrap;}

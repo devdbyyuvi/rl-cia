@@ -42,9 +42,9 @@ function drawChart() {
   const yScale = (val) => pad.top + chartH - ((val / maxInv) * chartH);
 
   ctx.beginPath();
-  ctx.strokeStyle = '#8bbdfc';
+  ctx.strokeStyle = '#94a3b8';
   ctx.lineWidth = 3;
-  ctx.shadowColor = '#8bbdfc';
+  ctx.shadowColor = '#94a3b8';
   ctx.shadowBlur = 8;
   chartState.rlInventory.forEach((val, idx) => {
     const x = xScale(idx);
@@ -140,6 +140,28 @@ function updateLog() {
   }
 }
 
+function strategyMode(mode) {
+  const strategyMap = {
+    TWAP: 'TWAP: Equal-volume slices across time with market routing.',
+    VWAP: 'VWAP: Route volume proportionally to market pressure and liquidity depth.',
+    NaiveLimit: 'Naive Limit: Passive resting order policy without inventory-aware tuning.'
+  };
+
+  const log = document.getElementById('actionLog');
+  const activeStrategy = strategyMap[mode];
+  const row = document.createElement('div');
+  row.className = 'log-item';
+  row.innerHTML = `<span class="log-dot passive-dot"></span><span class="log-text">Strategy changed to ${mode}: ${strategyMap[mode]}</span><span class="log-time">${new Date().toLocaleTimeString()}</span>`;
+
+  log.prepend(row);
+  while (log.children.length > 4) {
+    log.removeChild(log.lastElementChild);
+  }
+
+  const buttons = Array.from(document.querySelectorAll('.strategy-button'));
+  buttons.forEach((btn) => btn.classList.toggle('active-strategy', btn.dataset.strategy === mode));
+}
+
 function initDashboard() {
   drawChart();
   updateMetrics();
@@ -151,5 +173,28 @@ function initDashboard() {
   setInterval(updateActionBars, 1800);
   setInterval(updateLog, 2400);
 }
+
+const twapButton = document.getElementById('twapButton');
+const vwapButton = document.getElementById('vwapButton');
+const naiveButton = document.getElementById('naiveButton');
+const runButton = document.getElementById('runButton');
+
+
+twapButton.addEventListener('click', () => strategyMode('TWAP'));
+vwapButton.addEventListener('click', () => strategyMode('VWAP'));
+naiveButton.addEventListener('click', () => strategyMode('NaiveLimit'));
+runButton.addEventListener('click', () => {
+  const log = document.getElementById('actionLog');
+  const row = document.createElement('div');
+  row.className = 'log-item';
+  row.innerHTML = `<span class="log-dot market-dot"></span><span class="log-text">Simulation refreshed: benchmark cycle executed</span><span class="log-time">${new Date().toLocaleTimeString()}</span>`;
+  log.prepend(row);
+  while (log.children.length > 4) {
+    log.removeChild(log.lastElementChild);
+  }
+  updateMetrics();
+  updateActionBars();
+  drawChart();
+});
 
 document.addEventListener('DOMContentLoaded', initDashboard);
