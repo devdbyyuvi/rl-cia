@@ -1,10 +1,23 @@
 const chartState = {
-  labels: ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50'],
-  rlInventory: [1000, 960, 925, 900, 850, 820, 790, 760, 742, 735, 720],
-  twapInventory: [1000, 975, 950, 930, 900, 870, 850, 830, 820, 815, 806]
+  range: '1D',
+  datasets: {
+    '1D': {
+      labels: ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50'],
+      rlInventory: [1000, 960, 925, 900, 850, 820, 790, 760, 742, 735, 720],
+      twapInventory: [1000, 975, 950, 930, 900, 870, 850, 830, 820, 815, 806],
+      vwapInventory: [1000, 980, 955, 935, 910, 885, 865, 845, 830, 822, 815]
+    },
+    '7D': {
+      labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
+      rlInventory: [1000, 980, 960, 940, 920, 890, 840, 800],
+      twapInventory: [1000, 995, 985, 976, 960, 945, 920, 900],
+      vwapInventory: [1000, 990, 980, 970, 955, 940, 915, 890]
+    }
+  }
 };
 
 function drawChart() {
+  const dataset = chartState.datasets[chartState.range];
   const canvas = document.getElementById('inventoryChart');
   const ctx = canvas.getContext('2d');
   const w = canvas.width;
@@ -15,12 +28,19 @@ function drawChart() {
 
   ctx.clearRect(0, 0, w, h);
 
-  const gridColor = '#304060';
+  // Theme colors matching the new Black & Slate CSS
+  const gridColor = '#1e293b'; // Slate 800
+  const labelColor = '#94a3b8'; // Slate 400
+  const rlColor = '#94a3b8'; // Slate 400
+  const twapColor = '#f59e0b'; // Amber 500
+  const vwapColor = '#10b981'; // Emerald 500
+
   ctx.strokeStyle = gridColor;
   ctx.lineWidth = 1;
   ctx.font = '11px Inter, sans-serif';
-  ctx.fillStyle = '#8ea0bd';
+  ctx.fillStyle = labelColor;
 
+  // Draw Grid
   for (let i = 0; i <= 4; i += 1) {
     const y = pad.top + (chartH / 4) * i;
     ctx.beginPath();
@@ -37,16 +57,45 @@ function drawChart() {
     ctx.stroke();
   }
 
-  const maxInv = Math.max(...chartState.rlInventory, ...chartState.twapInventory);
-  const xScale = (idx) => pad.left + (idx / (chartState.labels.length - 1)) * chartW;
+  const maxInv = Math.max(...dataset.rlInventory, ...dataset.twapInventory, ...dataset.vwapInventory);
+  const xScale = (idx) => pad.left + (idx / (dataset.labels.length - 1)) * chartW;
   const yScale = (val) => pad.top + chartH - ((val / maxInv) * chartH);
 
+  // Draw VWAP (Green)
   ctx.beginPath();
-  ctx.strokeStyle = '#94a3b8';
+  ctx.strokeStyle = vwapColor;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([2, 2]);
+  dataset.vwapInventory.forEach((val, idx) => {
+    const x = xScale(idx);
+    const y = yScale(val);
+    if (idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw TWAP (Amber)
+  ctx.beginPath();
+  ctx.strokeStyle = twapColor;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 4]);
+  dataset.twapInventory.forEach((val, idx) => {
+    const x = xScale(idx);
+    const y = yScale(val);
+    if (idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw RL Policy (Slate)
+  ctx.beginPath();
+  ctx.strokeStyle = rlColor;
   ctx.lineWidth = 3;
-  ctx.shadowColor = '#94a3b8';
-  ctx.shadowBlur = 8;
-  chartState.rlInventory.forEach((val, idx) => {
+  ctx.shadowColor = rlColor;
+  ctx.shadowBlur = 6;
+  dataset.rlInventory.forEach((val, idx) => {
     const x = xScale(idx);
     const y = yScale(val);
     if (idx === 0) ctx.moveTo(x, y);
@@ -56,26 +105,15 @@ function drawChart() {
   ctx.shadowColor = 'transparent';
   ctx.shadowBlur = 0;
 
-  ctx.beginPath();
-  ctx.strokeStyle = '#ffd38a';
-  ctx.setLineDash([4, 4]);
-  ctx.lineWidth = 2;
-  chartState.twapInventory.forEach((val, idx) => {
-    const x = xScale(idx);
-    const y = yScale(val);
-    if (idx === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  ctx.fillStyle = '#8ea0bd';
-  for (let i = 0; i < chartState.labels.length; i++) {
+  // X-axis labels
+  ctx.fillStyle = labelColor;
+  for (let i = 0; i < dataset.labels.length; i++) {
     const x = xScale(i);
-    const label = chartState.labels[i];
+    const label = dataset.labels[i];
     ctx.fillText(label, x - 4, h - 8);
   }
 
+  // Y-axis labels
   for (let i = 0; i <= 4; i += 1) {
     const val = Math.round((maxInv / 4) * i);
     const y = pad.top + chartH - (chartH / 4) * i;
@@ -140,6 +178,15 @@ function updateLog() {
   }
 }
 
+function updateChartMeaning(range) {
+  const text = document.getElementById('chartMeaningText');
+  if (range === '7D') {
+    text.textContent = 'Inventory trajectory over a 7-day view. The policy adapts slower and uses portfolio-level smoothing for the execution path.';
+  } else {
+    text.textContent = 'Inventory falls as execution progresses. The RL line shows the policy’s adaptive path; TWAP and VWAP are reference baselines.';
+  }
+}
+
 function strategyMode(mode) {
   const strategyMap = {
     TWAP: 'TWAP: Equal-volume slices across time with market routing.',
@@ -148,7 +195,6 @@ function strategyMode(mode) {
   };
 
   const log = document.getElementById('actionLog');
-  const activeStrategy = strategyMap[mode];
   const row = document.createElement('div');
   row.className = 'log-item';
   row.innerHTML = `<span class="log-dot passive-dot"></span><span class="log-text">Strategy changed to ${mode}: ${strategyMap[mode]}</span><span class="log-time">${new Date().toLocaleTimeString()}</span>`;
@@ -178,7 +224,64 @@ const twapButton = document.getElementById('twapButton');
 const vwapButton = document.getElementById('vwapButton');
 const naiveButton = document.getElementById('naiveButton');
 const runButton = document.getElementById('runButton');
+const range1d = document.getElementById('range1d');
+const range7d = document.getElementById('range7d');
+const growthButton = document.getElementById('growthButton');
+const navItems = Array.from(document.querySelectorAll('.nav-item'));
 
+range1d.addEventListener('click', () => {
+  chartState.range = '1D';
+  range1d.classList.add('active-range');
+  range7d.classList.remove('active-range');
+  updateChartMeaning('1D');
+  drawChart();
+});
+
+range7d.addEventListener('click', () => {
+  chartState.range = '7D';
+  range7d.classList.add('active-range');
+  range1d.classList.remove('active-range');
+  updateChartMeaning('7D');
+  drawChart();
+});
+
+growthButton.addEventListener('click', () => {
+  const log = document.getElementById('actionLog');
+  const row = document.createElement('div');
+  row.className = 'log-item';
+  row.innerHTML = `<span class="log-dot green-dot"></span><span class="log-text">Performance view: execution cost down 3.4% vs baseline</span><span class="log-time">${new Date().toLocaleTimeString()}</span>`;
+  log.prepend(row);
+  while (log.children.length > 4) {
+    log.removeChild(log.lastElementChild);
+  }
+  updateMetrics();
+  const chartText = document.getElementById('chartMeaningText');
+  chartText.textContent = 'Performance view compares execution cost and slippage movement against the baseline policy.';
+});
+
+navItems.forEach((item) => {
+  item.addEventListener('click', (event) => {
+    event.preventDefault();
+    navItems.forEach((entry) => entry.classList.toggle('active', entry === item));
+    const log = document.getElementById('actionLog');
+    const row = document.createElement('div');
+    row.className = 'log-item';
+    const label = item.querySelector('span').textContent.trim();
+    row.innerHTML = `<span class="log-dot passive-dot"></span><span class="log-text">${label} tab opened</span><span class="log-time">${new Date().toLocaleTimeString()}</span>`;
+    log.prepend(row);
+    while (log.children.length > 4) {
+      log.removeChild(log.lastElementChild);
+    }
+    if (label === 'Performance') {
+      const chartText = document.getElementById('chartMeaningText');
+      chartText.textContent = 'Performance view highlights cost reduction, slippage control, and completion improvement against the selected benchmark.';
+    }
+    if (label === 'Policy Log') {
+      const chartText = document.getElementById('chartMeaningText');
+      chartText.textContent = 'Policy log records strategy mode, action routing, and benchmark refresh events for this execution session.';
+    }
+  });
+});
 
 twapButton.addEventListener('click', () => strategyMode('TWAP'));
 vwapButton.addEventListener('click', () => strategyMode('VWAP'));

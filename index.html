@@ -158,9 +158,9 @@
               <h2>Execution Progress</h2>
             </div>
             <div class="panel-controls">
-              <button class="icon-button active-range">1D</button>
-              <button class="icon-button">7D</button>
-              <button class="icon-button">
+              <button class="icon-button active-range" id="range1d">1D</button>
+              <button class="icon-button" id="range7d">7D</button>
+              <button class="icon-button" id="growthButton" aria-label="Toggle performance comparison">
                 <svg class="icon small-icon" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15l4-4 4 4 4-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
@@ -176,8 +176,8 @@
             <span><i class="legend-dot vwap-dot"></i> VWAP</span>
           </section>
           <section class="chart-footnote">
-            <span class="footnote-title">Inventory trajectory</span>
-            <span class="footnote-copy">The RL policy follows remaining inventory over time, while TWAP provides an equal-volume schedule baseline for comparison.</span>
+            <span class="footnote-title">What this chart means</span>
+            <span class="footnote-copy" id="chartMeaningText">Inventory falls as execution progresses. The RL line shows the policy’s adaptive path; TWAP and VWAP are reference baselines.</span>
           </section>
         </article>
 
@@ -259,7 +259,7 @@
             </div>
           </section>
           <section class="widget-footnote">
-            <span class="widget-footnote-label">Execution cost meaning</span>
+            <span class="widget-footnote-label">What this cost widget means</span>
             <span class="widget-footnote-copy">Lower and tighter slippage bars suggest more stable routing decisions and less adverse market impact.</span>
           </section>
         </article>
